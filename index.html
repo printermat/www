@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrintOMat - Automatyzacja drukowania dokumentów magazynowych</title>
+    <style>
+        :root {
+            --primary: #009688;
+            --primary-dark: #00796b;
+            --secondary: #475569;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #e0e0e0;
+        }
+        
+        .hero {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: white;
+            color: var(--primary);
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .features {
+            padding: 4rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+        }
+        
+        .process {
+            background-color: #f1f5f9;
+            padding: 4rem 0;
+        }
+        
+        .process-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            position: relative;
+        }
+        
+        .process-steps::before {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary);
+            z-index: 1;
+        }
+        
+        .step {
+            text-align: center;
+            width: 15%;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-weight: bold;
+        }
+        
+        .applications {
+            padding: 4rem 0;
+        }
+        
+        .application-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .application-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-top: 4px solid var(--primary);
+        }
+        
+        .application-card h3 {
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+        }
+        
+        .application-card ul {
+            padding-left: 1.5rem;
+        }
+        
+        .application-card li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .benefits {
+            background-color: #f1f5f9;
+            padding: 4rem 0;
+        }
+        
+        .benefits-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .benefit-icon {
+            margin-right: 1rem;
+            color: var(--success);
+            flex-shrink: 0;
+            font-size: 1.5rem;
+        }
+        
+        .cta {
+            text-align: center;
+            padding: 5rem 0;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+        }
+        
+        .cta h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta p {
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .btn-light {
+            background-color: white;
+            color: var(--primary);
+        }
+        
+        .btn-dark {
+            background-color: var(--dark);
+            color: white;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-col h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -0.5rem;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+        
+        .footer-col ul {
+            list-style: none;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-col a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-col a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            margin-top: 2rem;
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .process-steps {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .process-steps::before {
+                display: none;
+            }
+            
+            .step {
+                width: 100%;
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">PrintOMat</div>
+                <ul class="nav-links">
+                    <li><a href="#features">Funkcje</a></li>
+                    <li><a href="#process">Jak to działa</a></li>
+                    <li><a href="#applications">Zastosowania</a></li>
+                    <li><a href="#benefits">Korzyści</a></li>
+                    <li><a href="#contact">Kontakt</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Automatyzacja drukowania dokumentów magazynowych</h1>
+            <p>PrintOMat to kompleksowe rozwiązanie do automatycznego drukowania dokumentów magazynowych bezpośrednio z bazy danych na drukarki termiczne, paragonowe i bonowe. Eliminuj błędy, oszczędzaj czas i optymalizuj procesy magazynowe.</p>
+            <a href="#contact" class="btn">Zapytaj o ofertę</a>
+        </div>
+    </section>, 255, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .process-steps {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .process-steps::before {
+                display: none;
+            }
+            
+            .step {
+                width: 100%;
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">ThermalPrint Pro</div>
+                <ul class="nav-links">
+                    <li><a href="#features">Funkcje</a></li>
+                    <li><a href="#process">Jak to działa</a></li>
+                    <li><a href="#applications">Zastosowania</a></li>
+                    <li><a href="#benefits">Korzyści</a></li>
+                    <li><a href="#contact">Kontakt</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Automatyzacja drukowania dokumentów magazynowych</h1>
+            <p>ThermalPrint Pro to kompleksowe rozwiązanie do automatycznego drukowania dokumentów magazynowych bezpośrednio z bazy danych na drukarki termiczne. Eliminuj błędy, oszczędzaj czas i optymalizuj procesy magazynowe.</p>
+            <a href="#contact" class="btn">Zapytaj o ofertę</a>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Kluczowe funkcjonalności</h2>
+                <p>ThermalPrint Pro oferuje szereg zaawansowanych funkcji usprawniających procesy magazynowe</p>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span>🔄</span>
+                    </div>
+                    <h3>Automatyczne wykrywanie zamówień</h3>
+                    <p>System monitoruje bazę danych i automatycznie wykrywa nowe Zamówienia Odbiorcy (ZO) w czasie rzeczywistym.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span>🔄</span>
+                    </div>
+                    <h3>Wieloformatowa konwersja</h3>
+                    <p>Zaawansowany łańcuch przetwarzania: SQL → JSON → HTML → PDF → ZPL → druk dla optymalnej jakości wydruków.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span>🖨️</span>
+                    </div>
+                    <h3>Wsparcie różnych drukarek</h3>
+                    <p>Kompatybilność z drukarkami termicznymi Zebra, Honeywell, Brother, TSC, SATO, Datamax, Citizen, Epson i wielu innych.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span>🌐</span>
+                    </div>
+                    <h3>Panel webowy</h3>
+                    <p>Nowoczesny panel administracyjny dostępny z dowolnego urządzenia przez przeglądarkę internetową.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span>👥</span>
+                    </div>
+                    <h3>Filtrowanie użytkowników</h3>
+                    <p>Możliwość ograniczenia automatycznego druku do dokumentów wybranych użytkowników systemu.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span>📊</span>
+                    </div>
+                    <h3>Śledzenie historii wydruków</h3>
+                    <p>Unikanie duplikatów poprzez zapisywanie informacji o wydrukowanych dokumentach w bazie.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span>⚙️</span>
+                    </div>
+                    <h3>Konfigurowalne parametry</h3>
+                    <p>Dostosowanie rozdzielczości, rozmiaru etykiet i innych parametrów do potrzeb biznesowych.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="process" class="process">
+        <div class="container">
+            <div class="section-title">
+                <h2>Jak działa ThermalPrint Pro</h2>
+                <p>Zaawansowany proces przetwarzania danych w 6 krokach</p>
+            </div>
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>SQL</h3>
+                    <p>Pobieranie danych zamówień z bazy SQL Server, MySQL, PostgreSQL lub Oracle</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>JSON</h3>
+                    <p>Konwersja danych do struktury JSON</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>HTML</h3>
+                    <p>Generowanie dokumentu HTML z danymi zamówienia</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>PDF</h3>
+                    <p>Konwersja do formatu PDF z dokładnymi wymiarami</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <h3>ZPL</h3>
+                    <p>Przetwarzanie do języka drukarek termicznych (ZPL, EPL, DPL, TSPL i inne)</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">6</div>
+                    <h3>DRUK</h3>
+                    <p>Automatyczne wydrukowanie na drukarce</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="benefits">
+        <div class="container">
+            <div class="section-title">
+                <h2>Integracja z systemami ERP</h2>
+                <p>ThermalPrint Pro współpracuje z najpopularniejszymi polskimi systemami</p>
+            </div>
+            <div style="text-align: center; max-width: 900px; margin: 0 auto;">
+                <p style="margin-bottom: 20px; font-size: 1.1rem;">Nasze rozwiązanie zostało zaprojektowane z myślą o bezproblemowej integracji z szeroką gamą systemów używanych w polskich przedsiębiorstwach:</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; text-align: left; margin-bottom: 30px;">
+                    <div><strong>Comarch ERP XL/Optima</strong></div>
+                    <div><strong>Sage Symfonia</strong></div>
+                    <div><strong>Enova365</strong></div>
+                    <div><strong>WAPRO ERP</strong></div>
+                    <div><strong>Insert GT/Nexo</strong></div>
+                    <div><strong>CDN XL/OPT!MA</strong></div>
+                    <div><strong>Streamsoft Prestiż</strong></div>
+                    <div><strong>Reset2 ERP</strong></div>
+                    <div><strong>Forte</strong></div>
+                    <div><strong>Berberis ERP</strong></div>
+                    <div><strong>Navireo ERP</strong></div>
+                    <div><strong>KC-Firma</strong></div>
+                    <div><strong>Ramzes</strong></div>
+                    <div><strong>WF-Mag</strong></div>
+                    <div><strong>SoftLab ERP</strong></div>
+                </div>
+                
+                <p style="margin-bottom: 20px; font-size: 1.1rem;">Obsługujemy także popularne systemy fakturowe i sprzedażowe:</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; text-align: left;">
+                    <div>Fakturownia</div>
+                    <div>inFakt</div>
+                    <div>iFirma</div>
+                    <div>Taxeon</div>
+                    <div>wFirma</div>
+                    <div>Comarch RETAIL</div>
+                    <div>PC-Market</div>
+                    <div>LSI Software POSitive</div>
+                    <div>Novitus PC-POS</div>
+                    <div>Elzab</div>
+                    <div>Bitex Small Business</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="panel" class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Panel administracyjny webowy</h2>
+                <p>Zarządzaj całym systemem z dowolnego urządzenia</p>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 30px; margin-bottom: 40px;">
+                <div style="flex: 1; min-width: 300px;">
+                    <h3 style="margin-bottom: 15px; color: var(--primary-dark);">Multiplatformowy dostęp</h3>
+                    <p style="margin-bottom: 15px;">Panel administracyjny ThermalPrint Pro dostępny jest z dowolnego urządzenia posiadającego przeglądarkę internetową - komputerów PC, laptopów, tabletów, smartfonów oraz terminali przemysłowych.</p>
+                    <p>Niezależnie od tego, czy korzystasz z systemu Windows, macOS, Linux, iOS czy Android, masz pełną kontrolę nad systemem drukowania z dowolnego miejsca w firmie i poza nią.</p>
+                </div>
+                <div style="flex: 1; min-width: 300px;">
+                    <h3 style="margin-bottom: 15px; color: var(--primary-dark);">Kluczowe funkcje panelu</h3>
+                    <ul style="list-style-type: none; padding: 0;">
+                        <li style="padding: 5px 0;">✓ Pulpit zarządzania ze statystykami w czasie rzeczywistym</li>
+                        <li style="padding: 5px 0;">✓ Konfiguracja drukarek i parametrów druku</li>
+                        <li style="padding: 5px 0;">✓ Monitorowanie zleceń i statusu drukarek</li>
+                        <li style="padding: 5px 0;">✓ Historia wydruków z zaawansowanym filtrowaniem</li>
+                        <li style="padding: 5px 0;">✓ Zarządzanie szablonami dokumentów</li>
+                        <li style="padding: 5px 0;">✓ Konfiguracja integracji z systemami ERP</li>
+                        <li style="padding: 5px 0;">✓ Zarządzanie użytkownikami i uprawnieniami</li>
+                        <li style="padding: 5px 0;">✓ System powiadomień i alertów</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="printers" class="process">
+        <div class="container">
+            <div class="section-title">
+                <h2>Kompatybilność z drukarkami</h2>
+                <p>Współpracujemy z najpopularniejszymi modelami drukarek termicznych na rynku</p>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin: 40px 0;">
+                <div style="text-align: center; width: 150px;">
+                    <div style="font-weight: bold; font-size: 1.2rem; margin-bottom: 10px; color: var(--primary-dark);">Zebra</div>
+                    <div style="font-size: 0.9rem;">ZT410, ZT420</div>
+                    <div style="font-size: 0.9rem;">ZD420, ZD620</div>
+                    <div style="font-size: 0.9rem;">GK420d, GX430t</div>
+                </div>
+                <div style="text-align: center; width: 150px;">
+                    <div style="font-weight: bold; font-size: 1.2rem; margin-bottom: 10px; color: var(--primary-dark);">Honeywell</div>
+                    <div style="font-size: 0.9rem;">PC42t, PC43d</div>
+                    <div style="font-size: 0.9rem;">PM43, PM43c</div>
+                    <div style="font-size: 0.9rem;">PX940, PD45S</div>
+                </div>
+                <div style="text-align: center; width: 150px;">
+                    <div style="font-weight: bold; font-size: 1.2rem; margin-bottom: 10px; color: var(--primary-dark);">Brother</div>
+                    <div style="font-size: 0.9rem;">TD-4410D</div>
+                    <div style="font-size: 0.9rem;">TD-4420DN</div>
+                    <div style="font-size: 0.9rem;">TD-4550DNWB</div>
+                </div>
+                <div style="text-align: center; width: 150px;">
+                    <div style="font-weight: bold; font-size: 1.2
+
+    <section id="benefits" class="benefits">
+        <div class="container">
+            <div class="section-title">
+                <h2>Korzyści</h2>
+                <p>Dlaczego warto wybrać ThermalPrint Pro?</p>
+            </div>
+            <div class="benefits-list">
+                <div class="benefit-item">
+                    <div class="benefit-icon">✓</div>
+                    <div>
+                        <h3>Oszczędność czasu</h3>
+                        <p>Eliminacja ręcznego generowania i drukowania dokumentów</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">✓</div>
+                    <div>
+                        <h3>Redukcja błędów</h3>
+                        <p>Minimalizacja pomyłek związanych z czynnikiem ludzkim</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">✓</div>
+                    <div>
+                        <h3>Zwiększenie wydajności</h3>
+                        <p>Szybsze przetwarzanie zamówień i dokumentów</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">✓</div>
+                    <div>
+                        <h3>Elastyczność</h3>
+                        <p>Wsparcie dla różnych drukarek i formatów dokumentów</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">✓</div>
+                    <div>
+                        <h3>Skalowalność</h3>
+                        <p>Możliwość obsługi od kilku do setek zamówień dziennie</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">✓</div>
+                    <div>
+                        <h3>Łatwa integracja</h3>
+                        <p>Kompatybilność z popularnymi systemami ERP i bazami danych</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <h2>Gotowy na automatyzację procesów drukowania?</h2>
+            <p>Skontaktuj się z nami, aby otrzymać szczegółową ofertę dostosowaną do potrzeb Twojej firmy. Nasi eksperci pomogą w doborze optymalnego rozwiązania.</p>
+            <a href="#contact" class="btn btn-light">Zapytaj o ofertę</a>
+        </div>
+    </section>
+
+    <section id="contact" class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Kontakt</h2>
+                <p>Skontaktuj się z nami, aby uzyskać więcej informacji</p>
+            </div>
+            <div style="text-align: center;">
+                <h3>ThermalPrint Solutions</h3>
+                <p>ul. Drukarska 123<br>00-001 Warszawa</p>
+                <p>Email: kontakt@thermalprint.com<br>Tel: +48 123 456 789</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>ThermalPrint Pro</h3>
+                    <p>Profesjonalne rozwiązanie do automatyzacji drukowania dokumentów magazynowych. Zwiększ wydajność procesów logistycznych dzięki zaawansowanej technologii.</p>
+                </div>
+                <div class="footer-col">
+                    <h3>Szybkie linki</h3>
+                    <ul>
+                        <li><a href="#features">Funkcje</a></li>
+                        <li><a href="#process">Jak to działa</a></li>
+                        <li><a href="#applications">Zastosowania</a></li>
+                        <li><a href="#benefits">Korzyści</a></li>
+                        <li><a href="#contact">Kontakt</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Zasoby</h3>
+                    <ul>
+                        <li><a href="#">Dokumentacja</a></li>
+                        <li><a href="#">Wsparcie techniczne</a></li>
+                        <li><a href="#">Często zadawane pytania</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Kontakt</h3>
+                    <ul>
+                        <li>Email: kontakt@thermalprint.com</li>
+                        <li>Tel: +48 123 456 789</li>
+                        <li>ul. Drukarska 123</li>
+                        <li>00-001 Warszawa</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 ThermalPrint Solutions. Wszelkie prawa zastrzeżone.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
